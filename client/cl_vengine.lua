@@ -1,7 +1,8 @@
 -- Configuration
 
-local button = 167 -- 167 (F6 by default)
-local commandEnabled = false -- (false by default) If you set this to true, typing "/engine" in chat will also toggle your engine.
+-- local button = 113 -- 167 (F6 by default) | 113 (G) (L3)
+local defaultKeybind = 'G' -- G by default
+local commandEnabled = true -- (false by default) If you set this to true, typing "/eng" in chat will also toggle your engine.
 
 -- You're all set now!
 
@@ -11,24 +12,45 @@ local commandEnabled = false -- (false by default) If you set this to true, typi
 
 Citizen.CreateThread(function()
     if commandEnabled then
+        RegisterCommand('eng', function() 
+            toggleEngine()
+        end, false)
+        RegisterKeyMapping('eng', 'Toggle Engine', 'keyboard', defaultKeybind)
+    end
+    -- while true do
+    --     Citizen.Wait(0)
+    --     local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
+        
+    --     if (IsControlJustReleased(0, button) or IsDisabledControlJustReleased(0, button)) and vehicle ~= nil and vehicle ~= 0 and GetPedInVehicleSeat(vehicle, 0) then
+    --         toggleEngine()
+    --     end
+        
+    -- end
+end)
+
+Citizen.CreateThread(function()
+    if commandEnabled then
         RegisterCommand('engine', function() 
             toggleEngine()
         end, false)
     end
-    while true do
-        Citizen.Wait(0)
-        local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
+    -- while true do
+    --     Citizen.Wait(0)
+    --     local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
         
-        if (IsControlJustReleased(0, button) or IsDisabledControlJustReleased(0, button)) and vehicle ~= nil and vehicle ~= 0 and GetPedInVehicleSeat(vehicle, 0) then
-            toggleEngine()
-        end
+    --     if (IsControlJustReleased(0, button) or IsDisabledControlJustReleased(0, button)) and vehicle ~= nil and vehicle ~= 0 and GetPedInVehicleSeat(vehicle, 0) then
+    --         toggleEngine()
+    --     end
         
-    end
+    -- end
 end)
 
 function toggleEngine()
     local vehicle = GetVehiclePedIsIn(PlayerPedId(), false)
-    if vehicle ~= nil and vehicle ~= 0 and GetPedInVehicleSeat(vehicle, 0) then
+    local heli = IsPedInAnyHeli(PlayerPedId())
+    local plane = IsPedInAnyPlane(PlayerPedId())
+    if vehicle ~= nil and vehicle ~= 0 and heli ~= true and plane ~= true and GetPedInVehicleSeat(vehicle, 0) then
         SetVehicleEngineOn(vehicle, (not GetIsVehicleEngineRunning(vehicle)), false, true)
+    -- elseif heli or plane then
     end
 end
