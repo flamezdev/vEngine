@@ -15,7 +15,7 @@ Citizen.CreateThread(function()
         RegisterCommand('eng', function() 
             toggleEngine()
         end, false)
-        RegisterKeyMapping('eng', 'Toggle Engine', 'keyboard', defaultKeybind)
+        RegisterKeyMapping('eng', Lang:t("main.keybindMenuBindName"), 'keyboard', defaultKeybind)
     end
     -- while true do
     --     Citizen.Wait(0)
